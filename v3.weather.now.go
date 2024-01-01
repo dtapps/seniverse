@@ -49,17 +49,20 @@ func newV3WeatherNowResult(result V3WeatherNowResponse, body []byte, http gorequ
 // WeatherNow 天气实况
 // location 所查询的位置
 // https://seniverse.yuque.com/hyper_data/api_v3/nyiu3t
-func (c *V3Client) WeatherNow(ctx context.Context, location string, notMustParams ...gorequest.Params) (*V3WeatherNowResult, error) {
+func (c *V3Client) WeatherNow(ctx context.Context, location string, notMustParams ...gorequest.Params) (*V3WeatherNowResult, ApiError, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
 	params.Set("location", location)
 	// 请求
 	request, err := c.request(ctx, apiUrlV3+"/weather/now.json", params)
 	if err != nil {
-		return newV3WeatherNowResult(V3WeatherNowResponse{}, request.ResponseBody, request), err
+		return newV3WeatherNowResult(V3WeatherNowResponse{}, request.ResponseBody, request), ApiError{}, err
 	}
 	// 定义
 	var response V3WeatherNowResponse
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newV3WeatherNowResult(response, request.ResponseBody, request), err
+	// 错误
+	var apiError ApiError
+	err = gojson.Unmarshal(request.ResponseBody, &apiError)
+	return newV3WeatherNowResult(response, request.ResponseBody, request), apiError, err
 }

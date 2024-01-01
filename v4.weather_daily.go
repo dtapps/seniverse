@@ -246,17 +246,20 @@ func newV4WeatherDailyResult(result V4WeatherDailyResponse, body []byte, http go
 
 // WeatherDaily 天气网格预报（中国/15天/逐日）
 // https://seniverse.yuque.com/hyper_data/api_v4/weather_daily
-func (c *V4Client) WeatherDaily(ctx context.Context, locations string, notMustParams ...gorequest.Params) (*V4WeatherDailyResult, error) {
+func (c *V4Client) WeatherDaily(ctx context.Context, locations string, notMustParams ...gorequest.Params) (*V4WeatherDailyResult, ApiError, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
 	params.Set("locations", locations)
 	// 请求
 	request, err := c.request(ctx, apiUrlV4+"?fields=weather_daily", params, http.MethodGet)
 	if err != nil {
-		return newV4WeatherDailyResult(V4WeatherDailyResponse{}, request.ResponseBody, request), err
+		return newV4WeatherDailyResult(V4WeatherDailyResponse{}, request.ResponseBody, request), ApiError{}, err
 	}
 	// 定义
 	var response V4WeatherDailyResponse
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newV4WeatherDailyResult(response, request.ResponseBody, request), err
+	// 错误
+	var apiError ApiError
+	err = gojson.Unmarshal(request.ResponseBody, &apiError)
+	return newV4WeatherDailyResult(response, request.ResponseBody, request), apiError, err
 }

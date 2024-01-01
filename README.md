@@ -1,8 +1,8 @@
 <h1>
-<a href="https://www.dtapp.net/">Golang seniverse</a>
+<a href="https://www.dtapp.net/">Golang</a>
 </h1>
 
-📦 Golang seniverse
+📦 Golang 心知天气
 
 [comment]: <> (go)
 [![godoc](https://pkg.go.dev/badge/go.dtapp.net/seniverse?status.svg)](https://pkg.go.dev/go.dtapp.net/seniverse)
@@ -13,5 +13,5 @@
 #### 安装
 
 ```shell
-go get -v -u go.dtapp.net/seniverse@v1.0.1
+go get -v -u go.dtapp.net/seniverse@v1.0.2
 ```

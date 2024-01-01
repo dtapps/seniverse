@@ -49,17 +49,20 @@ func newV3WeatherDailyResult(result V3WeatherDailyResponse, body []byte, http go
 
 // WeatherDaily 未来15天逐日天气预报和昨日天气
 // https://seniverse.yuque.com/hyper_data/api_v3/sl6gvt
-func (c *V3Client) WeatherDaily(ctx context.Context, location string, notMustParams ...gorequest.Params) (*V3WeatherDailyResult, error) {
+func (c *V3Client) WeatherDaily(ctx context.Context, location string, notMustParams ...gorequest.Params) (*V3WeatherDailyResult, ApiError, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
 	params.Set("location", location)
 	// 请求
 	request, err := c.request(ctx, apiUrlV3+"/weather/daily.json", params)
 	if err != nil {
-		return newV3WeatherDailyResult(V3WeatherDailyResponse{}, request.ResponseBody, request), err
+		return newV3WeatherDailyResult(V3WeatherDailyResponse{}, request.ResponseBody, request), ApiError{}, err
 	}
 	// 定义
 	var response V3WeatherDailyResponse
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newV3WeatherDailyResult(response, request.ResponseBody, request), err
+	// 错误
+	var apiError ApiError
+	err = gojson.Unmarshal(request.ResponseBody, &apiError)
+	return newV3WeatherDailyResult(response, request.ResponseBody, request), apiError, err
 }
