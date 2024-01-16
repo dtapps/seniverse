@@ -32,6 +32,9 @@ func (c *V3Client) request(ctx context.Context, url string, param gorequest.Para
 	if c.gormLog.status {
 		go c.gormLog.client.Middleware(ctx, request)
 	}
+	if c.mongoLog.status {
+		go c.mongoLog.client.Middleware(ctx, request)
+	}
 
 	return request, err
 }
@@ -70,6 +73,9 @@ func (c *V4Client) request(ctx context.Context, url string, param gorequest.Para
 	// 记录日志
 	if c.gormLog.status {
 		go c.gormLog.client.Middleware(ctx, request)
+	}
+	if c.mongoLog.status {
+		go c.mongoLog.client.Middleware(ctx, request)
 	}
 
 	return request, err
