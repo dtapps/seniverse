@@ -8,10 +8,6 @@ type V3Client struct {
 		status bool           // 状态
 		client *golog.ApiGorm // 日志服务
 	}
-	mongoLog struct {
-		status bool            // 状态
-		client *golog.ApiMongo // 日志服务
-	}
 }
 
 func NewV3Client(key string) (*V3Client, error) {
@@ -24,10 +20,6 @@ type V4Client struct {
 	gormLog   struct {
 		status bool           // 状态
 		client *golog.ApiGorm // 日志服务
-	}
-	mongoLog struct {
-		status bool            // 状态
-		client *golog.ApiMongo // 日志服务
 	}
 }
 
